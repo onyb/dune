@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify
 from werkzeug.exceptions import HTTPException, default_exceptions
 
-from flask.ext.pymongo import BSONObjectIdConverter
+from flask_pymongo import BSONObjectIdConverter
 from core.api import settings
 from core.api.models import db
 
