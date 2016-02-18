@@ -8,6 +8,9 @@ REST interface for MirageOS unikernels
 $ sudo apt-get update
 $ sudo apt-get install python3-pip python3-dev python3-venv pylint
 ```
+**Note:** If you are running a version of Ubuntu older than 15.04, the package `python3-venv` may
+not be available. Use `python3.4-venv` instead.
+
 ###### Create and activate a Python 3 virtual environment with `venv`
 ```sh
 $ pyvenv ~/env
@@ -17,6 +20,7 @@ At this point, you should be able to see the `Python 3.4.3+` when you enter `pyt
 
 ###### Install Dune API requirements
 ```sh
+$ git clone https://github.com/onyb/dune
 $ cd dune
 $ pip install -r requirements.txt
 ```
@@ -25,7 +29,7 @@ $ pip install -r requirements.txt
 ```sh
 $ python runapiserver.py
 ```
-The webserver should now be running at http://localhost:5000 with the API root at http://localhost:5000/api
+The webserver should now be running at `http://localhost:5000` with the API root at `http://localhost:5000/api`
 
 #### Tech Stack
 - Python 3 (tested on 3.4)
