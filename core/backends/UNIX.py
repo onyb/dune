@@ -1,7 +1,8 @@
 import os
 
 from core.backends.IUnikernelBackend import IUnikernelBackend
-from core.utils.executor import call
+from core.utils.executor import logged_call
+from core.api.settings import _Config as Config  # TODO: Need to switch to proper config (Dev / Prod)
 
 
 class UNIXBackend(IUnikernelBackend):
@@ -11,7 +12,7 @@ class UNIXBackend(IUnikernelBackend):
     def register(self, project, module, _id, config, unikernel):
         self.work_dir = os.path.join(
             os.path.join(
-                '/home/ani',  # TODO: Do not hardcode this
+                Config.ROOT_DIR,
                 project,
                 *module  # Unpack list to arguments
             ),
@@ -43,8 +44,8 @@ class UNIXBackend(IUnikernelBackend):
 
     def configure(self, _id):
         # TODO: Need better exception handling
-        call('mirage configure --unix', self.work_dir)
+        logged_call('mirage configure --unix', self.work_dir)
 
     def compile(self, _id):
         # TODO: Need better exception handling
-        call('make', self.work_dir)
+        logged_call('make', self.work_dir)

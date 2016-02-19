@@ -4,7 +4,10 @@ import os
 class _Config(object):
     DEBUG = True
     TESTING = False
-    PROJECT_DIR = os.path.dirname(__file__)
+
+    ROOT_DIR = os.environ['HOME']
+    ASSETS_DIR = os.path.join(ROOT_DIR, 'dune_assets')
+
 
 
 class Prod(_Config):
