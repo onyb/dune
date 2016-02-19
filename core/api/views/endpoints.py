@@ -1,4 +1,4 @@
-from flask import Module, jsonify
+from flask import Module, jsonify, request
 from flask.views import MethodView
 
 from core.api.decorators import jsonp
@@ -26,30 +26,30 @@ def index():
     )
 
 
-class TestModelAPI(MethodView):
+class CreateUnikernel(MethodView):
     @jsonp
-    def get(self, id=None):
-        if id:
-            return jsonify(
-                code=200,
-                value=0
+    def get(self):
+        return jsonify_status_code(
+            code=405,
+            message='HTTP method GET is not allowed for this URL'
+        )
+
+    @jsonp
+    def post(self):
+        content = request.get_json(force=False, silent=True)
+        if not content:
+            return jsonify_status_code(
+                code=400,
+                message='Bad HTTP POST request'
             )
         else:
-            return jsonify(
-                code=200,
-                value=1
-            )
+            # Validate JSON
+            pass
 
 
-TestModel_view = TestModelAPI.as_view('test_model_api')
+CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
 api.add_url_rule(
-    '/test',
-    view_func=TestModel_view,
-    methods=['GET']
-)
-
-api.add_url_rule(
-    '/test/<string:id>',
-    view_func=TestModel_view,
-    methods=['GET']
+    '/unikernel/create',
+    view_func=CreateUnikernel_view,
+    methods=['GET', 'POST']
 )
