@@ -11,11 +11,18 @@ class IUnikernelBackend(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def register(self, _id):
+    def register(
+            self,
+            project: str,
+            module: [str],
+            _id: int,
+            config: str,
+            unikernel: str
+    ) -> str:
         """
         Initialize directory structure for the unikernel, and register it to the database and scheduler.
         :param _id: ID of the unikernel
-        :return: None
+        :return: Working directory of the unikernel
         """
         pass
 
