@@ -1,7 +1,7 @@
 import os
 
 from core.backends.IUnikernelBackend import IUnikernelBackend
-from core.utils.executor import logged_call
+from core.utils.executor import logged_call, call
 from core.api.settings import _Config as Config  # TODO: Need to switch to proper config (Dev / Prod)
 
 
@@ -49,3 +49,10 @@ class UNIXBackend(IUnikernelBackend):
     def compile(self, _id):
         # TODO: Need better exception handling
         logged_call('make', self.work_dir)
+
+    def optimize(self, _id):
+        call('strip main.native', self.work_dir)
+
+    def start(self, _id):
+        # FIXME: This call needs to be asynchronous
+        logged_call('main.native', self.work_dir)
