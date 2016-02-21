@@ -11,89 +11,85 @@ class IUnikernelBackend(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
+    def __init__(self, _id):
+        self.work_dir = None
+        self.executor = None
+        self._id = _id
+
+    @abstractmethod
     def register(
             self,
             project: str,
             module: [str],
-            _id: int,
             config: str,
             unikernel: str
     ) -> str:
         """
         Initialize directory structure for the unikernel, and register it to the database and scheduler.
-        :param _id: ID of the unikernel
         :return: Working directory of the unikernel
         """
         pass
 
     @abstractmethod
-    def configure(self, _id):
+    def configure(self):
         """
         Configure the unikernel to be built for the specific backend
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def compile(self, _id):
+    def compile(self):
         """
         Build the unikernel
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def optimize(self, _id):
+    def optimize(self):
         """
         Optimize the unikernel binary/VM by stripping off debug symbols / applying data compression, etc.
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def start(self, _id):
+    def start(self):
         """
         Launch/boot the unikernel
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def get_status(self, _id):
+    def get_status(self):
         """
         Get status of the unikernel
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def get_log(self, _id):
+    def get_log(self):
         """
         Get runtime log of the unikernel
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def stop(self, _id):
+    def stop(self):
         """
         Kill execution of the unikernel
-        :param _id: ID of the unikernel
         :return:
         """
         pass
 
     @abstractmethod
-    def destroy(self, _id):
+    def destroy(self):
         """
         Destroy the unikernel, remove all assets, and unregister from database and scheduler.
-        :param _id: ID of the unikernel
         :return:
         """
         pass

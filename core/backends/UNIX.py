@@ -6,18 +6,17 @@ from core.api.settings import _Config as Config  # TODO: Need to switch to prope
 
 
 class UNIXBackend(IUnikernelBackend):
-    def __init__(self):
-        self.work_dir = None
-        self.executor = None
+    def __init__(self, _id):
+        super().__init__(_id)
 
-    def register(self, project, module, _id, config, unikernel):
+    def register(self, project, module, config, unikernel):
         self.work_dir = os.path.join(
             os.path.join(
                 Config.ROOT_DIR,
                 project,
                 *module  # Unpack list to arguments
             ),
-            str(_id)
+            str(self._id)
         )
 
         self.executor = Executor(self.work_dir)
@@ -45,17 +44,17 @@ class UNIXBackend(IUnikernelBackend):
 
         return
 
-    def configure(self, _id):
+    def configure(self):
         # TODO: Need better exception handling
         self.executor.logged_call('mirage configure --unix')
 
-    def compile(self, _id):
+    def compile(self):
         # TODO: Need better exception handling
         self.executor.logged_call('make')
 
-    def optimize(self, _id):
+    def optimize(self):
         self.executor.logged_call('strip main.native')
 
-    def start(self, _id):
+    def start(self):
         # FIXME: This call needs to be asynchronous
         self.executor.logged_call('./main.native')
