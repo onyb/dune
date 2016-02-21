@@ -40,7 +40,7 @@ class Executor(object):
             line = self.process.stdout.readline()
             if line == b'':
                 # No output in stdout
-                if not self.is_executing():
+                if not self.is_running():
                     # subprocess has completed execution
                     return  # TODO: Implement status codes
                 else:
@@ -67,6 +67,10 @@ class Executor(object):
         # Close file handlers
         self.log.close()
         self.process.stdout.close()
+
+    @property
+    def pid(self):
+        return self.process.pid
 
 
 def _convert_subprocess_cmd(cmd):
