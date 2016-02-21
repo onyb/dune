@@ -40,7 +40,7 @@ class UNIXBackend(IUnikernelBackend):
 
         # TODO: Initialize scheduler
 
-        return self.work_dir
+        return
 
     def configure(self, _id):
         # TODO: Need better exception handling

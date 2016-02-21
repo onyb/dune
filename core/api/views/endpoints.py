@@ -1,6 +1,7 @@
 from flask import Module, jsonify, request
 from flask.views import MethodView
 
+from core.utils.RequestValidator import CreateUnikernelValidator
 from core.api.decorators import jsonp
 
 api = Module(
@@ -44,7 +45,14 @@ class CreateUnikernel(MethodView):
             )
         else:
             # Validate JSON
-            pass
+            if not CreateUnikernelValidator.validate(content):
+                return jsonify_status_code(
+                    code=400,
+                    message='HTTP POST request data is invalid. Refer to the Dune API documentation for details.'
+                )
+            else:
+                # do something
+                pass
 
 
 CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
