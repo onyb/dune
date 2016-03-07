@@ -1,4 +1,6 @@
 import os
+from core.utils.Executor import _convert_subprocess_cmd
+import subprocess
 
 from core.exceptions.Exceptions import OPAMConfigurationExeception
 
@@ -22,3 +24,14 @@ def check_environment() -> bool:
                 os.path.join('.opam', 'system', 'bin')
         ):
             return True
+
+
+def check_mirage():
+    try:
+        subprocess.check_call(
+            _convert_subprocess_cmd('which mirage')
+        )
+    except subprocess.CalledProcessError:
+        return False
+    else:
+        return True
