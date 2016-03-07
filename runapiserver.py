@@ -1,11 +1,17 @@
 import os
 
 from core.api import create_app
+from core.exceptions.Exceptions import OPAMConfigurationExeception
+from core.utils.check_sanity import check_environment, check_mirage
 
-env = os.environ.get('SITE_NAME', 'Dev')
-app = create_app(env)
 
-if __name__ == "__main__":
+def main():
+    if not check_environment() or not check_mirage():
+        raise OPAMConfigurationExeception
+
+    env = os.environ.get('SITE_NAME', 'Dev')
+    app = create_app(env)
+
     port = int(
         os.environ.get(
             'PORT',
@@ -16,3 +22,7 @@ if __name__ == "__main__":
         host='0.0.0.0',
         port=port
     )
+
+
+if __name__ == "__main__":
+    main()

@@ -1,8 +1,7 @@
 import os
-from core.utils.Executor import _convert_subprocess_cmd
 import subprocess
 
-from core.exceptions.Exceptions import OPAMConfigurationExeception
+from core.utils.Executor import _convert_subprocess_cmd
 
 
 def check_environment() -> bool:
@@ -16,7 +15,7 @@ def check_environment() -> bool:
 
     for var in __opam_env__:
         if not os.environ.get(var, None):
-            raise OPAMConfigurationExeception
+            return False
 
     PATH = os.environ.get('PATH')
     for path in PATH.split(':'):
