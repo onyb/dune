@@ -19,24 +19,28 @@ class UNIXBackend(IUnikernelBackend):
             str(self._id)
         )
 
-        self.executor = Executor(self.work_dir)
-
         os.makedirs(
             self.work_dir,
             exist_ok=True
         )
 
+        self.executor = Executor(self.work_dir)
+
         with open(
                 os.path.join(self.work_dir, 'config.ml'),
                 'w'
         ) as file:
-            file.write(config)
+            file.write(
+                '\n'.join(config)
+            )
 
         with open(
                 os.path.join(self.work_dir, 'unikernel.ml'),
                 'w'
         ) as file:
-            file.write(unikernel)
+            file.write(
+                '\n'.join(unikernel)
+            )
 
         # TODO: Save to database
 
@@ -46,14 +50,14 @@ class UNIXBackend(IUnikernelBackend):
 
     def configure(self):
         # TODO: Need better exception handling
-        self.executor.logged_call('mirage configure --unix')
+        self.executor.logged_call('cat unikernel.ml')
 
     def compile(self):
         # TODO: Need better exception handling
         self.executor.logged_call('make')
 
     def optimize(self):
-        self.executor.logged_call('strip main.native')
+        self.executor.logged_call('strip ./main.native')
 
     def start(self):
         # FIXME: This call needs to be asynchronous

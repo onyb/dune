@@ -27,11 +27,12 @@ class Executor(object):
         )
 
         try:
-            self.process = subprocess.Popen(cmd,
+            self.process = subprocess.Popen(args=cmd,
                                             cwd=self.cwd,
                                             stdout=subprocess.PIPE,
                                             bufsize=1,
                                             close_fds=True)
+
 
         except subprocess.CalledProcessError as e:
             _perror(e)

@@ -2,6 +2,7 @@ from flask import Module, jsonify, request
 from flask.views import MethodView
 
 from core.utils.RequestValidator import CreateUnikernelValidator
+from core.backends.UNIX import UNIXBackend
 from core.api.decorators import jsonp
 
 api = Module(
@@ -51,8 +52,23 @@ class CreateUnikernel(MethodView):
                     message='HTTP POST request data is invalid. Refer to the Dune API documentation for details.'
                 )
             else:
-                # do something
-                pass
+                if content['backend'] == 'unix':
+                    backend_instance = UNIXBackend(_id='bose')
+
+                    backend_instance.register(
+                        content['meta']['project'],
+                        content['meta']['module'],
+                        content['config'],
+                        content['unikernel']
+                    )
+
+                    backend_instance.configure()
+
+                    backend_instance.compile()
+
+                    # backend_instance.optimize()
+
+                    backend_instance.start()
 
 
 CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
