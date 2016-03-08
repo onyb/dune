@@ -5,6 +5,8 @@ from core.utils.RequestValidator import CreateUnikernelValidator
 from core.backends.UNIX import UNIXBackend
 from core.api.decorators import jsonp
 
+from uuid import uuid4
+
 api = Module(
     __name__,
     url_prefix='/api'
@@ -53,7 +55,8 @@ class CreateUnikernel(MethodView):
                 )
             else:
                 if content['backend'] == 'unix':
-                    backend_instance = UNIXBackend(_id='bose')
+                    _id = uuid4().hex[:7]
+                    backend_instance = UNIXBackend(_id=_id)
 
                     backend_instance.register(
                         content['meta']['project'],
