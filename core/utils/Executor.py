@@ -1,7 +1,8 @@
+import os
+import platform
+import shlex
 import subprocess
 import sys
-import platform
-import os
 
 from core.exceptions.Exceptions import UnsupportedPlatformException
 
@@ -78,7 +79,7 @@ def _convert_subprocess_cmd(cmd):
     if platform.system() == 'Windows':
         raise UnsupportedPlatformException
     else:
-        return [cmd]
+        return shlex.split(cmd)
 
 
 def _perror(e):

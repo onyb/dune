@@ -50,7 +50,7 @@ class UNIXBackend(IUnikernelBackend):
 
     def configure(self):
         # TODO: Need better exception handling
-        self.executor.logged_call('cat unikernel.ml')
+        self.executor.logged_call('mirage configure --unix')
 
     def compile(self):
         # TODO: Need better exception handling
