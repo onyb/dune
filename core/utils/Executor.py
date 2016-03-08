@@ -22,11 +22,6 @@ class Executor(object):
 
         cmd = _convert_subprocess_cmd(cmd)
 
-        self.log = open(
-            os.path.join(self.cwd, 'dune.log'),
-            'ab'
-        )
-
         try:
             self.process = subprocess.Popen(args=cmd,
                                             cwd=self.cwd,
