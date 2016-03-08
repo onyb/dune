@@ -4,7 +4,7 @@ import shlex
 import subprocess
 import sys
 
-from core.exceptions.Exceptions import UnsupportedPlatformException
+from core.exceptions import UnsupportedPlatformException
 
 
 class Executor(object):

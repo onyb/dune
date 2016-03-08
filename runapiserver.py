@@ -1,7 +1,7 @@
 import os
 
 from core.api import create_app
-from core.exceptions.Exceptions import OPAMConfigurationExeception
+from core.exceptions import OPAMConfigurationExeception
 from core.utils.check_sanity import check_environment, check_mirage
 
 
