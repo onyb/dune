@@ -25,7 +25,7 @@ def check_environment() -> bool:
             return True
 
 
-def check_mirage():
+def check_mirage() -> bool:
     try:
         subprocess.check_call(
             _convert_subprocess_cmd('which mirage')
@@ -34,3 +34,11 @@ def check_mirage():
         return False
     else:
         return True
+
+
+def is_root() -> bool:
+    # Get the effective user id
+    if os.geteuid() == 0:
+        return True
+    else:
+        return False
