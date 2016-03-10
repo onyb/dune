@@ -1,5 +1,6 @@
-import os
 import subprocess
+
+import os
 
 from core.utils.Executor import _convert_subprocess_cmd
 
@@ -27,9 +28,10 @@ def check_environment() -> bool:
 
 def check_mirage() -> bool:
     try:
-        subprocess.check_call(
+        subprocess.check_output(
             _convert_subprocess_cmd('which mirage')
         )
+
     except subprocess.CalledProcessError:
         return False
     else:
