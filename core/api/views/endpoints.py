@@ -73,6 +73,11 @@ class CreateUnikernel(MethodView):
 
                     backend_instance.start()
 
+                    return jsonify_status_code(
+                        code=200,
+                        message='Unikernel execution successful',
+                        _id=_id
+                    )
 
 CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
 api.add_url_rule(
