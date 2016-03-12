@@ -55,21 +55,25 @@ class UNIXBackend(IUnikernelBackend):
 
         return None
 
-    def configure(self):
+    def configure(self) -> int:
         # TODO: Need better exception handling
         executor = Executor(self.work_dir)
         executor.logged_call('mirage configure --unix')
+        return executor.pid
 
-    def compile(self):
+    def compile(self) -> int:
         # TODO: Need better exception handling
         executor = Executor(self.work_dir)
         executor.logged_call('make')
+        return executor.pid
 
-    def optimize(self):
+    def optimize(self) -> int:
         executor = Executor(self.work_dir)
         executor.logged_call('strip ./main.native')
+        return executor.pid
 
-    def start(self):
+    def start(self) -> int:
         # FIXME: This call needs to be asynchronous
         executor = Executor(self.work_dir)
         executor.logged_call('./main.native')
+        return executor.pid

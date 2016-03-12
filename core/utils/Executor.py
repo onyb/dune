@@ -24,12 +24,13 @@ class Executor(object):
         cmd = _convert_subprocess_cmd(cmd)
 
         try:
-            self.process = subprocess.Popen(args=cmd,
-                                            cwd=self.cwd,
-                                            stdout=subprocess.PIPE,
-                                            bufsize=1,
-                                            close_fds=True)
-
+            self.process = subprocess.Popen(
+                args=cmd,
+                cwd=self.cwd,
+                stdout=subprocess.PIPE,
+                bufsize=1,
+                close_fds=True
+            )
 
         except subprocess.CalledProcessError as e:
             _perror(e)
@@ -54,7 +55,7 @@ class Executor(object):
                 # Flush file object to ensure real-time logging
                 self.log.flush()
 
-    def is_running(self):
+    def is_running(self) -> bool:
         return self.process.poll() is None
 
     def terminate(self):
@@ -67,7 +68,7 @@ class Executor(object):
         self.process.stdout.close()
 
     @property
-    def pid(self):
+    def pid(self) -> int:
         return self.process.pid
 
 
