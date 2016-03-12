@@ -1,3 +1,5 @@
+rq
+redis
 Flask
 itsdangerous
 Jinja2
