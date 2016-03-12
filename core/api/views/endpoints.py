@@ -5,6 +5,8 @@ from core.utils.RequestValidator import CreateUnikernelValidator
 from core.backends.UNIX import UNIXBackend
 from core.api.decorators import jsonp
 
+from ..RedisQueue import Q
+
 from uuid import uuid4
 
 api = Module(
@@ -58,20 +60,41 @@ class CreateUnikernel(MethodView):
                     _id = uuid4().hex[:7]
                     backend_instance = UNIXBackend(_id=_id)
 
-                    backend_instance.register(
+
+                    Q.enqueue(
+                        backend_instance.register,
                         content['meta']['project'],
                         content['meta']['module'],
                         content['config'],
                         content['unikernel']
                     )
 
-                    backend_instance.configure()
+                    #backend_instance.register(
+                    #    content['meta']['project'],
+                    #    content['meta']['module'],
+                    #    content['config'],
+                    #    content['unikernel']
+                    #)
 
-                    backend_instance.compile()
+                    #Q.enqueue(
+                    #    backend_instance.configure
+                    #)
+
+                    #backend_instance.configure()
+
+                    #Q.enqueue(
+                    #    backend_instance.compile
+                    #)
+
+                    #backend_instance.compile()
 
                     # backend_instance.optimize()
 
-                    backend_instance.start()
+                    #Q.enqueue(
+                    #    backend_instance.start
+                    #)
+
+                    #backend_instance.start()
 
                     return jsonify_status_code(
                         code=200,
