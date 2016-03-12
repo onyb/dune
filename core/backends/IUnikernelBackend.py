@@ -11,7 +11,10 @@ class IUnikernelBackend(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def __init__(self, _id):
+    def __init__(
+            self,
+            _id
+    ):
         self.work_dir = None
         self.executor = None
         self._id = _id
@@ -19,8 +22,6 @@ class IUnikernelBackend(object):
     @abstractmethod
     def register(
             self,
-            project: str,
-            module: [str],
             config: str,
             unikernel: str
     ) -> str:

@@ -1,13 +1,12 @@
+from uuid import uuid4
+
 from flask import Module, jsonify, request
 from flask.views import MethodView
 
-from core.utils.RequestValidator import CreateUnikernelValidator
-from core.backends.UNIX import UNIXBackend
 from core.api.decorators import jsonp
-
+from core.backends.UNIX import UNIXBackend
+from core.utils.RequestValidator import CreateUnikernelValidator
 from ..RedisQueue import Q
-
-from uuid import uuid4
 
 api = Module(
     __name__,
@@ -58,49 +57,36 @@ class CreateUnikernel(MethodView):
             else:
                 if content['backend'] == 'unix':
                     _id = uuid4().hex[:7]
-                    backend_instance = UNIXBackend(_id=_id)
 
+                    backend_instance = UNIXBackend(
+                        _id=_id,
+                        project=content['meta']['project'],
+                        module=content['meta']['module']
+                    )
 
-                    Q.enqueue(
-                        backend_instance.register,
-                        content['meta']['project'],
-                        content['meta']['module'],
+                    backend_instance.register(
                         content['config'],
                         content['unikernel']
                     )
 
-                    #backend_instance.register(
-                    #    content['meta']['project'],
-                    #    content['meta']['module'],
-                    #    content['config'],
-                    #    content['unikernel']
-                    #)
+                    Q.enqueue(
+                        backend_instance.configure
+                    )
 
-                    #Q.enqueue(
-                    #    backend_instance.configure
-                    #)
+                    Q.enqueue(
+                        backend_instance.compile
+                    )
 
-                    #backend_instance.configure()
-
-                    #Q.enqueue(
-                    #    backend_instance.compile
-                    #)
-
-                    #backend_instance.compile()
-
-                    # backend_instance.optimize()
-
-                    #Q.enqueue(
-                    #    backend_instance.start
-                    #)
-
-                    #backend_instance.start()
+                    Q.enqueue(
+                        backend_instance.start
+                    )
 
                     return jsonify_status_code(
                         code=200,
                         message='Unikernel execution successful',
                         _id=_id
                     )
+
 
 CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
 api.add_url_rule(

@@ -1,8 +1,9 @@
-import os
 import platform
 import shlex
 import subprocess
 import sys
+
+import os
 
 from core.exceptions import UnsupportedPlatformException
 
