@@ -1,9 +1,9 @@
+import os
 import platform
 import shlex
 import subprocess
 import sys
-
-import os
+import time
 
 from core.exceptions import UnsupportedPlatformException
 
@@ -75,8 +75,37 @@ class Executor(object):
                 # Flush file object to ensure real-time logging
                 self.log.flush()
 
+    def call(self, cmd):
+        if 'posix' not in sys.builtin_module_names:
+            raise UnsupportedPlatformException
+
+        cmd = _convert_subprocess_cmd(cmd)
+
+        try:
+            if not self.stderr:
+                self.process = subprocess.Popen(
+                    args=cmd,
+                    cwd=self.cwd,
+                    stdout=subprocess.PIPE
+                )
+
+        except subprocess.CalledProcessError as e:
+            _perror(e)
+
     def is_running(self) -> bool:
+        # FIXME: Pointless line to satisfy processor clock
+        time.sleep(0.5)
         return self.process.poll() is None
+
+    def has_completed(self) -> bool:
+        # FIXME: Pointless line to satisfy processor clock
+        time.sleep(0.5)
+        return self.process.poll() is 0
+
+    def was_terminated(self) -> bool:
+        # FIXME: Pointless line to satisfy processor clock
+        time.sleep(0.5)
+        return self.process.poll() < 0
 
     def terminate(self):
         self.process.terminate()
