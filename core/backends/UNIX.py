@@ -57,13 +57,19 @@ class UNIXBackend(IUnikernelBackend):
 
     def configure(self) -> int:
         # TODO: Need better exception handling
-        executor = Executor(self.work_dir)
+        executor = Executor(
+            cwd=self.work_dir,
+            logfile='configure.log'
+        )
         executor.logged_call('mirage configure --unix')
         return executor.pid
 
     def compile(self) -> int:
         # TODO: Need better exception handling
-        executor = Executor(self.work_dir)
+        executor = Executor(
+            cwd=self.work_dir,
+            logfile='compile.log'
+        )
         executor.logged_call('make')
         return executor.pid
 
@@ -73,7 +79,11 @@ class UNIXBackend(IUnikernelBackend):
         return executor.pid
 
     def start(self) -> int:
-        # FIXME: This call needs to be asynchronous
-        executor = Executor(self.work_dir)
+        executor = Executor(
+            cwd=self.work_dir,
+            logfile='stdout.log',
+            stderr=True  # FIXME: Mirage console prints to stderr by default
+        )
+
         executor.logged_call('./main.native')
         return executor.pid

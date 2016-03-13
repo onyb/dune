@@ -9,28 +9,47 @@ from core.exceptions import UnsupportedPlatformException
 
 
 class Executor(object):
-    def __init__(self, cwd, logfile='dune.log'):
+    def __init__(
+            self,
+            cwd: str,
+            logfile: str = 'dune.log',
+            stderr: bool = False
+    ):
         self.process = None
         self.cwd = cwd
         self.log = open(
             os.path.join(self.cwd, logfile),
             'ab'
         )
+        self.stderr = stderr
 
-    def logged_call(self, cmd):
+    def logged_call(
+            self,
+            cmd
+    ):
         if 'posix' not in sys.builtin_module_names:
             raise UnsupportedPlatformException
 
         cmd = _convert_subprocess_cmd(cmd)
 
         try:
-            self.process = subprocess.Popen(
-                args=cmd,
-                cwd=self.cwd,
-                stdout=subprocess.PIPE,
-                bufsize=1,
-                close_fds=True
-            )
+            if not self.stderr:
+                self.process = subprocess.Popen(
+                    args=cmd,
+                    cwd=self.cwd,
+                    stdout=subprocess.PIPE,
+                    bufsize=-1,
+                    close_fds=True
+                )
+            else:
+                self.process = subprocess.Popen(
+                    args=cmd,
+                    cwd=self.cwd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    bufsize=-1,
+                    close_fds=True
+                )
 
         except subprocess.CalledProcessError as e:
             _perror(e)
@@ -43,6 +62,7 @@ class Executor(object):
                     # subprocess has completed execution
                     return  # TODO: Implement status codes
                 else:
+                    print("Running")
                     # subprocess is still running
                     # TODO: This can be optimized by sleeping for a while
                     pass
