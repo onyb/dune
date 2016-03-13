@@ -6,18 +6,26 @@ REST interface for MirageOS unikernels
 
 ```sh
 $ sudo apt-get update
-$ sudo apt-get install python3-pip python3-dev python3-venv pylint
+$ sudo apt-get install python3-pip python3-dev python3-virtualenv pylint
 $ sudo apt-get install opam
 ```
-**Note:** If you are running a version of Ubuntu older than 15.04, the package `python3-venv` may
-not be available. Use `python3.4-venv` instead.
 
-###### Create and activate a Python 3 virtual environment with `venv`
+###### Install and launch Redis Server
+
 ```sh
-$ pyvenv ~/env
+$ wget http://download.redis.io/redis-stable.tar.gz
+$ tar xvzf redis-stable.tar.gz
+$ cd redis-stable
+$ make
+$ sudo make install
+$ redis-server
+```
+
+###### Create and activate a Python 3 virtual environment with `virtualenv`
+```sh
+$ virtualenv -p python3 ~/env
 $ source ~/env/bin/activate
 ```
-At this point, you should be able to see the `Python 3.4.3+` when you enter `python --version`.
 
 ###### Initialize OPAM and install MirageOS
 ```sh
@@ -40,10 +48,12 @@ $ python runapiserver.py
 The webserver should now be running at `http://localhost:5000` with the API root at `http://localhost:5000/api`
 
 #### Tech Stack
+- Python 3
 - [OCaml](http://ocaml.org)
 - [Mirage](http://mirage.io)
-- Python 3 (tested on 3.4)
+- [Redis](http://redis.io) for acting as a broker
 - [Flask](http://flask.pocoo.org) for the web application and API
+- [Redis Queue](http://python-rq.org) for asynchronous task queueing
 - [Jinja2](http://jinja.pocoo.org) for templating with Flask
 - [MongoDB](https://docs.mongodb.org/manual) for the backend database
 - [Flask-PyMongo](https://flask-pymongo.readthedocs.org/en/latest), a wrapper around the original [PyMongo](https://api.mongodb.org/python/current) driver.
