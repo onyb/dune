@@ -11,29 +11,29 @@ from core.exceptions import UnsupportedPlatformException
 class Executor(object):
     def __init__(
             self,
-            cwd: str,
-            logfile: str = 'dune.log',
-            stderr: bool = False
+            cwd: str
     ):
         self.process = None
         self.cwd = cwd
-        self.log = open(
-            os.path.join(self.cwd, logfile),
-            'ab'
-        )
-        self.stderr = stderr
 
     def logged_call(
             self,
-            cmd
+            cmd,
+            logfile: str = 'dune.log',
+            stderr: bool = False
     ):
         if 'posix' not in sys.builtin_module_names:
             raise UnsupportedPlatformException
 
+        log = open(
+            os.path.join(self.cwd, logfile),
+            'ab'
+        )
+
         cmd = _convert_subprocess_cmd(cmd)
 
         try:
-            if not self.stderr:
+            if not stderr:
                 self.process = subprocess.Popen(
                     args=cmd,
                     cwd=self.cwd,
@@ -70,10 +70,11 @@ class Executor(object):
                 # Found some text in stdout
 
                 # noinspection PyTypeChecker
-                self.log.write(line)
+                log.write(line)
 
                 # Flush file object to ensure real-time logging
-                self.log.flush()
+                log.flush()
+                log.close()
 
     def call(self, cmd):
         if 'posix' not in sys.builtin_module_names:
@@ -82,12 +83,11 @@ class Executor(object):
         cmd = _convert_subprocess_cmd(cmd)
 
         try:
-            if not self.stderr:
-                self.process = subprocess.Popen(
-                    args=cmd,
-                    cwd=self.cwd,
-                    stdout=subprocess.PIPE
-                )
+            self.process = subprocess.Popen(
+                args=cmd,
+                cwd=self.cwd,
+                stdout=subprocess.PIPE
+            )
 
         except subprocess.CalledProcessError as e:
             _perror(e)
@@ -112,8 +112,6 @@ class Executor(object):
         self.process.stdout.close()
 
     def close(self):
-        # Close file handlers
-        self.log.close()
         self.process.stdout.close()
 
     @property

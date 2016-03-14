@@ -58,32 +58,50 @@ class UNIXBackend(IUnikernelBackend):
     def configure(self) -> int:
         # TODO: Need better exception handling
         executor = Executor(
-            cwd=self.work_dir,
+            cwd=self.work_dir
+        )
+
+        executor.logged_call(
+            cmd='mirage configure --unix',
             logfile='configure.log'
         )
-        executor.logged_call('mirage configure --unix')
+
         return executor.pid
 
     def compile(self) -> int:
         # TODO: Need better exception handling
         executor = Executor(
-            cwd=self.work_dir,
+            cwd=self.work_dir
+        )
+
+        executor.logged_call(
+            cmd='make',
             logfile='compile.log'
         )
-        executor.logged_call('make')
+
         return executor.pid
 
     def optimize(self) -> int:
-        executor = Executor(self.work_dir)
-        executor.logged_call('strip ./main.native')
+        executor = Executor(
+            cwd=self.work_dir
+        )
+
+        executor.logged_call(
+            cmd='strip ./main.native',
+            logfile='strip.log'
+        )
+
         return executor.pid
 
     def start(self) -> int:
         executor = Executor(
-            cwd=self.work_dir,
+            cwd=self.work_dir
+        )
+
+        executor.logged_call(
+            cmd='./main.native',
             logfile='stdout.log',
             stderr=True  # FIXME: Mirage console prints to stderr by default
         )
 
-        executor.logged_call('./main.native')
         return executor.pid
