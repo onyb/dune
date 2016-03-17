@@ -74,7 +74,7 @@ class Executor(object):
 
                 # Flush file object to ensure real-time logging
                 log.flush()
-                log.close()
+        log.close()
 
     def call(self, cmd):
         if 'posix' not in sys.builtin_module_names:
