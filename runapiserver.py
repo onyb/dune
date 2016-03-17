@@ -1,8 +1,9 @@
 import os
 
 from core.api import create_app
-from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, UnikernelLibraryNotFound
-from core.utils.check_sanity import check_environment, check_mirage, is_root
+from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, UnikernelLibraryNotFound, \
+    RedisQueueNotFound
+from core.utils.check_sanity import check_environment, check_mirage, is_root, check_redis_queue
 
 
 def main():
@@ -14,6 +15,9 @@ def main():
 
     if not is_root():
         raise InsufficientPrivilegeError
+
+    if not check_redis_queue():
+        raise RedisQueueNotFound
 
     env = os.environ.get('SITE_NAME', 'Dev')
     app = create_app(env)

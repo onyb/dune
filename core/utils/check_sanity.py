@@ -38,6 +38,18 @@ def check_mirage() -> bool:
         return True
 
 
+def check_redis_queue() -> bool:
+    try:
+        subprocess.check_output(
+            _convert_subprocess_cmd('rq info')
+        )
+
+    except subprocess.CalledProcessError:
+        return False
+    else:
+        return True
+
+
 def is_root() -> bool:
     # Get the effective user id
     if os.geteuid() == 0:
