@@ -160,3 +160,10 @@ def check_output(cmd, cwd):
         _perror(e)
     finally:
         return out
+
+
+def pidof(name):
+    cmd = _convert_subprocess_cmd('pidof ' + name)
+    return subprocess.check_output(
+        cmd
+    )

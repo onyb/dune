@@ -2,7 +2,7 @@ import subprocess
 
 import os
 
-from core.utils.Executor import _convert_subprocess_cmd
+from core.utils.Executor import _convert_subprocess_cmd, pidof
 
 
 def check_environment() -> bool:
@@ -38,15 +38,28 @@ def check_mirage() -> bool:
         return True
 
 
-def check_redis_queue() -> bool:
+def check_redis_server() -> bool:
     try:
-        subprocess.check_output(
-            _convert_subprocess_cmd('rq info')
-        )
+        pidof('redis-server')
 
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
         return False
     else:
+        return True
+
+
+def check_redis_queue() -> bool:
+    try:
+        out = subprocess.check_output(
+            _convert_subprocess_cmd('rq info')
+        ).decode('utf-8')
+
+    except FileNotFoundError as e:
+        return False
+    else:
+        if '0 workers' in out:
+            return False
+
         return True
 
 
