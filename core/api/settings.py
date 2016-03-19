@@ -5,7 +5,7 @@ class _Config(object):
     DEBUG = True
     TESTING = False
 
-    ROOT_DIR = os.environ['HOME']
+    ROOT_DIR = '/home/ani' #os.environ['HOME']
     ASSETS_DIR = os.path.join(ROOT_DIR, 'dune_assets')
 
 
