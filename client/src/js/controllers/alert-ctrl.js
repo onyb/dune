@@ -7,6 +7,8 @@ angular
     .controller('AlertsCtrl', ['$scope', AlertsCtrl]);
 
 function AlertsCtrl($scope) {
+    $scope.showAlert = false;
+
     $scope.alerts = [{
         type: 'success',
         msg: 'Thanks for visiting! Feel free to create pull requests to improve the dashboard!'
@@ -16,6 +18,8 @@ function AlertsCtrl($scope) {
     }];
 
     $scope.addAlert = function() {
+        $scope.showAlert = true;
+
         $scope.alerts.push({
             msg: 'Another alert!'
         });

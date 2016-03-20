@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>RDash AngularJS</title>
+  <title>Dune Dashboard</title>
   <!-- STYLES -->
   <!-- build:css lib/css/main.min.css -->
   <link rel="stylesheet" type="text/css" href="components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="components/rdash-ui/dist/css/rdash.min.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
   <!-- endbuild -->
   <!-- SCRIPTS -->
   <!-- build:js lib/js/main.min.js -->
@@ -28,7 +29,7 @@
     <div id="sidebar-wrapper">
       <ul class="sidebar">
         <li class="sidebar-main">
-          <a ng-click="toggleSidebar()">
+          <a ng-click="toggleSidebar()" class="pointer">
             Dashboard
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
@@ -40,21 +41,24 @@
         <li class="sidebar-list">
           <a href="#/tables">Tables <span class="menu-icon fa fa-table"></span></a>
         </li>
+        <li class="sidebar-list">
+          <a href="#/create">Create <span class="menu-icon fa fa-cube"></span></a>
+        </li>
       </ul>
       <div class="sidebar-footer">
         <div class="col-xs-4">
-          <a href="https://github.com/rdash/rdash-angular" target="_blank">
-            Github
+          <a href="https://github.com/onyb/dune" target="_blank">
+            GitHub
           </a>
         </div>
         <div class="col-xs-4">
-          <a href="https://github.com/rdash/rdash-angular/blob/master/README.md" target="_blank">
-            About
+          <a href="https://github.com/onyb/dune/blob/master/README.md" target="_blank">
+            Readme
           </a>
         </div>
         <div class="col-xs-4">
-          <a href="#">
-            Support
+          <a href="mailto:ani07nov@gmail.com">
+            Contact
           </a>
         </div>
       </div>

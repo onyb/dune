@@ -1,0 +1,96 @@
+<div ng-controller="AlertsCtrl">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div ng-show="showAlert" class="alert alert-success fade in">
+        <button ng-click="showAlert=false" class="close" data-dismiss="alert" aria-label="close">&times;</button>
+        <strong>Success!</strong> This alert box could indicate a successful or positive action.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <rd-widget>
+        <rd-widget-header icon="fa-tasks" title="Meta">
+        </rd-widget-header>
+        <rd-widget-body>
+          <div class="responsive">
+          <form class="form-horizontal row-border" action="#">
+            <div class="form-group">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <input class="form-control" placeholder="Project" type="text" required>
+                  </div>
+                  <div class="col-xs-6">
+                    <input class="form-control" placeholder="Module hierarchy (comma separated)" type="text">
+                  </div>
+                  <div class="col-xs-3">
+                    <input class="form-control" placeholder="Unikernel name" type="text" required>
+                  </div>
+                </div>
+            </div>
+          </form>
+          </div>
+
+          <div class="row">
+            Backend: &nbsp;&nbsp;
+              <label class="radio-inline">
+                <input name="backend" id="unix" value="unix" checked="true" type="radio"> UNIX
+              </label>
+              <label class="radio-inline">
+                <input name="backend" id="xen" value="xen" type="radio"> XEN
+              </label>
+          </div>
+        </rd-widget-body>
+      </rd-widget>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <rd-widget>
+        <rd-widget-header icon="fa-tasks" title="Unikernel">
+        </rd-widget-header>
+        <rd-widget-body>
+          <div class="responsive">
+          <form class="form-horizontal row-border" action="#">
+            <div class="form-group">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <textarea class="form-control" rows="5" placeholder="unikernel.ml"required></textarea>
+                  </div>
+                </div>
+            </div>
+          </form>
+          </div>
+        </rd-widget-body>
+      </rd-widget>
+    </div>
+    <div class="col-lg-6">
+      <rd-widget>
+        <rd-widget-header icon="fa-tasks" title="Config">
+        </rd-widget-header>
+        <rd-widget-body>
+          <div class="responsive">
+          <form class="form-horizontal row-border" action="#">
+            <div class="form-group">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <textarea class="form-control" rows="5" placeholder="config.ml"required></textarea>
+                  </div>
+                </div>
+            </div>
+          </form>
+          </div>
+        </rd-widget-body>
+      </rd-widget>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-2 col-lg-offset-5">
+      <button ng-click="addAlert()" class="btn btn-info" title="">Create Unikernel</button>
+    </div>
+  </div>
+</div>
