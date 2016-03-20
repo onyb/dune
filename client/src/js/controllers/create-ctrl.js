@@ -19,8 +19,6 @@ function CreateCtrl($scope, $http) {
             backend: $scope.backend
         };
 
-        //payload = JSON.stringify(payload);
-
         $http.post("http://localhost:5000/api/unikernel/create", payload).success(function(data, status) {
             alert(JSON.stringify(data));
         }).error(function(data, status) {

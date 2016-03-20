@@ -37,17 +37,13 @@ class UNIXBackend(IUnikernelBackend):
                 os.path.join(self.work_dir, 'config.ml'),
                 'w'
         ) as file:
-            file.write(
-                '\n'.join(config)
-            )
+            file.write(config)
 
         with open(
                 os.path.join(self.work_dir, 'unikernel.ml'),
                 'w'
         ) as file:
-            file.write(
-                '\n'.join(unikernel)
-            )
+            file.write(unikernel)
 
         # TODO: Save to database
 

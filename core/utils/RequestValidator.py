@@ -13,7 +13,7 @@ class CreateUnikernelValidator(Validator):
     }
 
     __meta__ = {
-        'text': Validator.OPTIONAL,
+        'name': Validator.OPTIONAL,
         'project': Validator.REQUIRED,
         'module': Validator.OPTIONAL
     }
@@ -42,7 +42,7 @@ class CreateUnikernelValidator(Validator):
 if __name__ == '__main__':
     valid_POST_data = {
         'meta': {
-            'text': None,
+            'name': None,
             'project': None,
             'module': []
         },
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     invalid_POST_data_1 = {
         'meta': {
-            'text': None,
+            'name': None,
             # 'project': None,
             'module': []
         },
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     invalid_POST_data_2 = {
         'meta': {
-            'text': None,
+            'name': None,
             'project': None,
             'module': []
         },
