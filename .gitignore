@@ -169,6 +169,7 @@ ENV/
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff:
+.idea
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
@@ -339,6 +340,7 @@ build/Release
 # Dependency directories
 node_modules
 jspm_packages
+components
 
 # Optional npm cache directory
 .npm
