@@ -17,8 +17,11 @@ function AlertsCtrl($scope) {
         msg: 'Found a bug? Create an issue with as many details as you can.'
     }];
 
-    $scope.addAlert = function() {
+    $scope.addAlert = function(type, msg) {
         $scope.showAlert = true;
+
+        $scope.type = type;
+        $scope.msg = msg;
 
         $scope.alerts.push({
             msg: 'Another alert!'
