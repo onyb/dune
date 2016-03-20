@@ -47,7 +47,18 @@ $ python runapiserver.py
 ```
 The webserver should now be running at `http://localhost:5000` with the API root at `http://localhost:5000/api`
 
+###### Launch Dune Client
+```sh
+$ cd client
+$ sudo npm install
+$ bower install
+$ gulp build
+$ gulp
+```
+The AngularJS dashboard is served at `http://localhost:8888`
+
 #### Tech Stack
+###### Dune Core
 - Python 3
 - [OCaml](http://ocaml.org)
 - [Mirage](http://mirage.io)
@@ -58,3 +69,8 @@ The webserver should now be running at `http://localhost:5000` with the API root
 - [MongoDB](https://docs.mongodb.org/manual) for the backend database
 - [Flask-PyMongo](https://flask-pymongo.readthedocs.org/en/latest), a wrapper around the original [PyMongo](https://api.mongodb.org/python/current) driver.
 - Test bench with [nose](https://nose.readthedocs.org/en/latest)
+
+###### Dune Client
+- [AngularJS](https://angularjs.org)
+- [Bower](http://bower.io)
+- [Gulp](http://gulpjs.com)
