@@ -5,6 +5,9 @@ from werkzeug.exceptions import HTTPException, default_exceptions
 
 from flask_pymongo import BSONObjectIdConverter
 from core.api import settings
+
+from flask_cors import CORS
+
 from core.api.models import db
 
 
@@ -13,6 +16,10 @@ def create_app(environment=None):
     Create an app instance
     """
     app = Flask('core')
+
+    # Allow CORS for all domains on all routes
+    CORS(app)
+
     app.url_map.converters['ObjectId'] = BSONObjectIdConverter
 
     # Config app for environment

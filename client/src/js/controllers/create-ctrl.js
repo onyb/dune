@@ -4,11 +4,11 @@
 
 angular
     .module('RDash')
-    .controller('CreateCtrl', ['$scope', CreateCtrl]);
+    .controller('CreateCtrl', ['$scope', '$http', CreateCtrl]);
 
-function CreateCtrl($scope) {
+function CreateCtrl($scope, $http) {
     $scope.sendPost = function() {
-        var data = {
+        var payload = {
             meta: {
                 project: $scope.project,
                 module: $scope.module,
@@ -19,10 +19,12 @@ function CreateCtrl($scope) {
             backend: $scope.backend
         };
 
-        alert(JSON.stringify(data));
+        //payload = JSON.stringify(payload);
 
-        //$http.post("/echo/json/", data).success(function(data, status) {
-        //    $scope.hello = data;
-        //})
+        $http.post("http://localhost:5000/api/unikernel/create", payload).success(function(data, status) {
+            alert(JSON.stringify(data));
+        }).error(function(data, status) {
+            alert(JSON.stringify(data));
+        });
     };
 }
