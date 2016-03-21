@@ -1,0 +1,42 @@
+sudo: false
+language: generic
+os:
+- linux
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.6
+    packages:
+    - build-essential
+    - binutils-gold
+    - python3
+    - python3-dev
+    - python3-pip
+    - python3-virtualenv
+    - opam
+
+before_script:
+- cd $HOME
+- wget http://download.redis.io/redis-stable.tar.gz
+- tar xvzf redis-stable.tar.gz
+- cd $HOME/redis-stable
+- make
+- sudo make install
+- redis-server &
+
+- git config --global user.email "ani07nov@gmail.com"
+- git config --global user.name "Anirudha Bose"
+
+- virtualenv -p python3 $HOME/env
+- source $HOME/env/bin/activate
+- pip install -r requirements.txt
+- opam init -a
+- eval `opam config env`
+- opam install mirage
+
+- rq worker &
+
+script:
+- nosetests3
