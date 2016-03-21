@@ -1,81 +1,148 @@
 class Validator(object):
-    REQUIRED = True
-    OPTIONAL = False
+    pass
 
 
 class CreateUnikernelValidator(Validator):
     __toplevel__ = {
-        'meta': Validator.REQUIRED,
-        'unikernel': Validator.REQUIRED,
-        'config': Validator.REQUIRED,
-        'backend': Validator.REQUIRED,
-        'cron': Validator.OPTIONAL
+        'meta': {
+            'required': True,
+            'type': dict
+        },
+        'unikernel': {
+            'required': True,
+            'type': str
+        },
+        'config': {
+            'required': True,
+            'type': str
+        },
+        'backend': {
+            'required': True,
+            'type': str
+        },
+        'cron': {
+            'required': False,
+            'type': str
+        }
     }
 
     __meta__ = {
-        'name': Validator.OPTIONAL,
-        'project': Validator.REQUIRED,
-        'module': Validator.OPTIONAL
+        'name': {
+            'required': False,
+            'type': str
+        },
+        'project': {
+            'required': True,
+            'type': str
+        },
+        'module': {
+            'required': True,
+            'type': list
+        }
     }
 
     @staticmethod
     def validate(data: dict) -> bool:
         for key in data:
+            # Check if payload contains any field not defined in the schema
             if key not in CreateUnikernelValidator.__toplevel__:
                 return False
 
-        for key, value in CreateUnikernelValidator.__toplevel__.items():
-            if value is Validator.REQUIRED and key not in data:
+            # Check type of data in each field of payload
+            elif type(data[key]) is not CreateUnikernelValidator.__toplevel__[key]['type']:
                 return False
 
+        # Check if all required fields are present in the payload
+        for key, value in CreateUnikernelValidator.__toplevel__.items():
+            if value['required'] is True and key not in data:
+                return False
+
+        # Check if all required fields are present in the payload
         for key in data['meta']:
             if key not in CreateUnikernelValidator.__meta__:
                 return False
 
+        # Check if all required fields in meta are present in the payload
         for key, value in CreateUnikernelValidator.__meta__.items():
-            if value is Validator.REQUIRED and key not in data['meta']:
+            if value['required'] is True and key not in data['meta']:
                 return False
+
+        # meta fields cannot contain whitespace characters
+        if ' ' in data['meta']['project'] or ' ' in ''.join(data['meta']['module']) or ' ' in data['meta']['name']:
+            return False
 
         return True
 
 
 if __name__ == '__main__':
-    valid_POST_data = {
+    # Valid POST data
+    data_1 = {
         'meta': {
-            'name': None,
-            'project': None,
-            'module': []
+            'name': 'foo',
+            'project': 'bar',
+            'module': ['baz']
         },
-        'unikernel': None,
-        'config': None,
-        'backend': None,
-        'cron': None
+        'unikernel': 'Dummy OCaml program',
+        'config': 'Dummy OCaml program',
+        'backend': 'xen',
+        'cron': 'crontab'
     }
 
-    invalid_POST_data_1 = {
+    # POST data with missing required field
+    data_2 = {
         'meta': {
-            'name': None,
+            'name': 'foo',
             # 'project': None,
             'module': []
         },
-        'unikernel': None,
-        'config': None,
+        'unikernel': '',
+        'config': '',
+        'backend': 'unix',
+        'cron': ''
+    }
+
+    # POST data with invalid type
+    data_3 = {
+        'meta': {
+            'name': None,
+            'project': None,
+            'module': 'moduleX'
+        },
+        'unikernel': 1,
+        'config': '',
         'backend': None,
         'cron': None
     }
 
-    invalid_POST_data_2 = {
+    # POST data with an extra undefined field
+    data_4 = {
         'meta': {
-            'name': None,
-            'project': None,
+            'name': 'foo',
+            'project': 'bar',
+            'bose': True,
             'module': []
         },
-        'unikernel': None,
-        'config': None,
-        # 'backend': None,
-        'cron': None
+        'unikernel': '',
+        'config': '',
+        'backend': 'unix',
+        'cron': ''
     }
 
-    assert CreateUnikernelValidator.validate(valid_POST_data) == True
-    assert CreateUnikernelValidator.validate(invalid_POST_data_1) == False
-    assert CreateUnikernelValidator.validate(invalid_POST_data_2) == False
+    # POST data with whitespaces in meta
+    data_5 = {
+        'meta': {
+            'name': 'project name',
+            'project': '',
+            'module': ['a', 'game of', 'thrones']
+        },
+        'unikernel': '',
+        'config': '',
+        'backend': '',
+        'cron': ''
+    }
+
+    assert CreateUnikernelValidator.validate(data_1) == True
+    assert CreateUnikernelValidator.validate(data_2) == False
+    assert CreateUnikernelValidator.validate(data_3) == False
+    assert CreateUnikernelValidator.validate(data_4) == False
+    assert CreateUnikernelValidator.validate(data_5) == False
