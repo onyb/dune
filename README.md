@@ -1,5 +1,5 @@
 # Dune
-REST interface for MirageOS unikernels
+VM manager for MirageOS unikernels
 
 #### Running Dune locally on Ubuntu
 ###### Install required packages from Ubuntu repositories
