@@ -1,3 +1,1 @@
-from flask_pymongo import PyMongo
-
-db = PyMongo()
+mongo_client = None
