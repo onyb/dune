@@ -21,9 +21,7 @@ class Prod(_Config):
 class Dev(_Config):
     NAME = "Dev"
     DEBUG = True
-    MONGODB_SETTINGS = {
-        'host': 'mongodb://USERNAME:PASSWORD@HOST',
-    }
+    MONGO_DBNAME = 'dune'
 
 
 class Testing(_Config):

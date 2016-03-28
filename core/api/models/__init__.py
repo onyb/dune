@@ -1,1 +1,0 @@
-mongo_client = None

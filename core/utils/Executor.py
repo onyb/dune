@@ -7,6 +7,7 @@ import time
 
 from core.exceptions import UnsupportedPlatformException
 
+from core.api.Status import Status
 
 class Executor(object):
     def __init__(
@@ -91,6 +92,20 @@ class Executor(object):
 
         except subprocess.CalledProcessError as e:
             _perror(e)
+
+    def probe_status(self):
+        # FIXME: Pointless line to satisfy processor clock
+        time.sleep(0.5)
+        status = self.process.poll()
+        if status is None:
+            return Status.RUNNING
+        elif status is 0:
+            return Status.SUCCEEDED
+        elif status < 0:
+            return Status.KILLED
+        else:
+            # FIXME: Investigate more into this case
+            return Status.FAILED
 
     def is_running(self) -> bool:
         # FIXME: Pointless line to satisfy processor clock

@@ -8,6 +8,8 @@ from core.backends.UNIX import UNIXBackend
 from core.utils.RequestValidator import CreateUnikernelValidator
 from ..RedisQueue import Q
 
+from core.api import API
+
 api = Module(
     __name__,
     url_prefix='/api'
@@ -57,6 +59,12 @@ class CreateUnikernel(MethodView):
             else:
                 if content['backend'] == 'unix':
                     _id = uuid4().hex[:7]
+
+                    content['_id'] = _id
+                    content['status'] = None
+                    API.mongo_client.db.jobs.insert_one(
+                        content
+                    )
 
                     backend_instance = UNIXBackend(
                         _id=_id,

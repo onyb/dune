@@ -1,6 +1,6 @@
 import os
 
-from core.api import create_app
+from core.api import API
 from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, UnikernelLibraryNotFound, \
     RedisServerNotFound, RedisQueueException
 from core.utils.check_sanity import check_environment, check_mirage, is_root, check_redis_server, check_redis_queue
@@ -22,9 +22,6 @@ def main():
     if not check_redis_queue():
         raise RedisQueueException
 
-    env = os.environ.get('SITE_NAME', 'Dev')
-    app = create_app(env)
-
     port = int(
         os.environ.get(
             'PORT',
@@ -32,7 +29,10 @@ def main():
         )
     )
 
-    app.run(
+    API().create_app()
+    API().create_mongo()
+
+    API.app.run(
         host='0.0.0.0',
         port=port
     )

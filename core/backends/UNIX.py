@@ -4,6 +4,8 @@ from core.api.settings import _Config as Config  # TODO: Need to switch to prope
 from core.backends.IUnikernelBackend import IUnikernelBackend
 from core.utils.Executor import Executor
 
+from core.api.Status import Status
+
 
 class UNIXBackend(IUnikernelBackend):
     def __init__(
@@ -28,6 +30,8 @@ class UNIXBackend(IUnikernelBackend):
             config,
             unikernel
     ):
+        Status.set(self._id, Status.WAITING)
+
         os.makedirs(
             self.work_dir,
             exist_ok=True
@@ -45,7 +49,6 @@ class UNIXBackend(IUnikernelBackend):
         ) as file:
             file.write(unikernel)
 
-        # TODO: Save to database
 
         # TODO: Initialize scheduler
 
