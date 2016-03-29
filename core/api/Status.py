@@ -10,7 +10,7 @@ class Status(object):
 
     @staticmethod
     def get(_id: str) -> int:
-        result = API.mongo_client.db.jobs.find_one(
+        result = API.db.jobs.find_one(
             {'_id': _id}
         )
 
@@ -18,12 +18,27 @@ class Status(object):
             return result['status']
 
     @staticmethod
-    def set(_id: str, status: str) -> None: # TODO: Annotate status
-        API.mongo_client.db.jobs.update_one(
-            {
-                '_id': _id
-            },
-            {
-                '$set': {'status': status}
-            }
-        )
+    def set(_id: str, status: str) -> None:  # TODO: Annotate status
+        if API.db is not None:
+            API.db.jobs.update_one(
+                {
+                    '_id': _id
+                },
+                {
+                    '$set': {'status': status}
+                }
+            )
+        else:
+            client = API.create_mongo()
+            db = client.dune
+
+            db.jobs.update_one(
+                {
+                    '_id': _id
+                },
+                {
+                    '$set': {'status': status}
+                }
+            )
+
+            client.close()
