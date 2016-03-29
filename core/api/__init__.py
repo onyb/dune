@@ -2,7 +2,10 @@ import os
 
 from flask import Flask, jsonify
 from flask_cors import CORS
-from flask_pymongo import BSONObjectIdConverter, PyMongo
+
+from pymongo import MongoClient
+
+
 from werkzeug.exceptions import HTTPException, default_exceptions
 
 from core.api import settings
@@ -10,7 +13,7 @@ from core.api import settings
 
 class API(object):
     app = None
-    mongo_client = None
+    db = None
 
     @staticmethod
     def create_app(environment=None):
@@ -21,8 +24,6 @@ class API(object):
 
         # Allow CORS for all domains on all routes
         CORS(app)
-
-        app.url_map.converters['ObjectId'] = BSONObjectIdConverter
 
         # Config app for environment
         if not environment:
@@ -35,9 +36,10 @@ class API(object):
             response = jsonify(
                 message=str(ex)
             )
-            response.status_code = (ex.code
-                                    if isinstance(ex, HTTPException)
-                                    else 500)
+            response.status_code = (
+                ex.code if isinstance(ex, HTTPException) else 500
+            )
+
             return response
 
         for code in default_exceptions.items():
@@ -46,11 +48,10 @@ class API(object):
         from core.api.views.endpoints import api
         app.register_module(api)
 
-        # initialize modules
-        #mongo_client.init_app(app)
-
         API.app = app
 
     @staticmethod
     def create_mongo():
-        API.mongo_client = PyMongo(API.app)
+        client = MongoClient()
+        API.db = client.dune
+        return client

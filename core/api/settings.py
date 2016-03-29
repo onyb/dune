@@ -21,8 +21,6 @@ class Prod(_Config):
 class Dev(_Config):
     NAME = "Dev"
     DEBUG = True
-    MONGO_DBNAME = 'dune'
-
 
 class Testing(_Config):
     NAME = "Test"

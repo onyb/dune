@@ -103,4 +103,9 @@ class UNIXBackend(IUnikernelBackend):
             stderr=True  # FIXME: Mirage console prints to stderr by default
         )
 
+        Status.set(
+            self._id,
+            executor.probe_status()
+        )
+
         return executor.pid

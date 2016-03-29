@@ -62,7 +62,7 @@ class CreateUnikernel(MethodView):
 
                     content['_id'] = _id
                     content['status'] = None
-                    API.mongo_client.db.jobs.insert_one(
+                    API.db.jobs.insert_one(
                         content
                     )
 

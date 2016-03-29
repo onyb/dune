@@ -5,9 +5,9 @@ import subprocess
 import sys
 import time
 
+from core.api.Status import Status
 from core.exceptions import UnsupportedPlatformException
 
-from core.api.Status import Status
 
 class Executor(object):
     def __init__(
@@ -153,12 +153,15 @@ def _perror(e):
 def call(cmd, cwd):
     cmd = _convert_subprocess_cmd(cmd)
     try:
-        subprocess.check_call(cmd,
-                              cwd=cwd,
-                              shell=False,
-                              stdin=subprocess.PIPE,
-                              stdout=None,
-                              stderr=subprocess.STDOUT)
+        subprocess.check_call(
+            cmd,
+            cwd=cwd,
+            shell=False,
+            stdin=subprocess.PIPE,
+            stdout=None,
+            stderr=subprocess.STDOUT
+        )
+
     except subprocess.CalledProcessError as e:
         _perror(e)
 
@@ -166,11 +169,14 @@ def call(cmd, cwd):
 def check_output(cmd, cwd):
     cmd = _convert_subprocess_cmd(cmd)
     try:
-        out = subprocess.check_output(cmd,
-                                      cwd=cwd,
-                                      shell=False,
-                                      stdin=subprocess.PIPE,
-                                      stderr=subprocess.STDOUT).decode('utf-8')
+        out = subprocess.check_output(
+            cmd,
+            cwd=cwd,
+            shell=False,
+            stdin=subprocess.PIPE,
+            stderr=subprocess.STDOUT
+        ).decode('utf-8')
+
     except subprocess.CalledProcessError as e:
         _perror(e)
     finally:
