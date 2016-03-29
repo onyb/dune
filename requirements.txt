@@ -7,3 +7,4 @@ MarkupSafe
 Werkzeug
 Flask-PyMongo
 flask-cors
+python-daemon

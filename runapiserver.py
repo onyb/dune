@@ -5,6 +5,8 @@ from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, 
     RedisServerNotFound, RedisQueueException
 from core.utils.check_sanity import check_environment, check_mirage, is_root, check_redis_server, check_redis_queue
 
+from core.utils.Worker import launch_daemon
+
 
 def main():
     if not check_environment():
@@ -20,6 +22,7 @@ def main():
         raise RedisServerNotFound
 
     if not check_redis_queue():
+        # launch_daemon()
         raise RedisQueueException
 
     port = int(
