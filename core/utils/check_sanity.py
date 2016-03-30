@@ -19,9 +19,20 @@ def check_environment() -> bool:
             return False
 
     PATH = os.environ.get('PATH')
+
+    try:
+        OCAML_VERSION = subprocess.check_output(
+           _convert_subprocess_cmd('ocaml -vnum')
+        ).decode('utf-8').strip()
+
+    except subprocess.CalledProcessError:
+        return False
+
     for path in PATH.split(':'):
         if path.endswith(
-                os.path.join('.opam', 'system', 'bin')
+            os.path.join('.opam', 'system', 'bin')
+        ) or path.endswith(
+            os.path.join('.opam', OCAML_VERSION, 'bin')
         ):
             return True
 
