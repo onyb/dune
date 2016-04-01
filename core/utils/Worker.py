@@ -34,7 +34,12 @@ __workers__ = [
 ]
 
 
-def get_available_worker_name():
+def get_available_rq_worker_name() -> str:
+    """
+    Assign a worker name which is not already used
+
+    :return: Name of the worker
+    """
     out = check_output(
         cmd='rq info',
         cwd='/'
@@ -46,17 +51,20 @@ def get_available_worker_name():
             # TODO: Raise exception for worker limit
 
 
-def launch_worker():
+def launch_rq_worker() -> None:
+    """
+    Blocking function to launch a worker using Python RQ's internal API
+    """
     with Connection():
         w = Worker(
-            get_available_worker_name()
+            get_available_rq_worker_name()
         )
 
         w.work()
 
 
-def launch_daemon():
-    worker = get_available_worker_name()
+def launch_rq_daemon():
+    worker = get_available_rq_worker_name()
     pid = "/tmp/%s.pid" % worker
 
     logger = logging.getLogger(__name__)
@@ -70,7 +78,7 @@ def launch_daemon():
     daemon = Daemonize(
         app="dune",
         pid=pid,
-        action=launch_worker,
+        action=launch_rq_worker,
         keep_fds=keep_fds
     )
 

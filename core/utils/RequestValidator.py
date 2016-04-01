@@ -43,6 +43,12 @@ class CreateUnikernelValidator(Validator):
 
     @staticmethod
     def validate(data: dict) -> bool:
+        """
+        Check whether the data corresponds to schema as given in class CreateUnikernelValidator.__toplevel__ and
+        CreateUnikernelValidator.__meta__
+        :param data: POST data in JSON format
+        :return: True if data is valid, False otherwise
+        """
         for key in data:
             # Check if payload contains any field not defined in the schema
             if key not in CreateUnikernelValidator.__toplevel__:

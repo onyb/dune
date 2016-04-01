@@ -6,6 +6,11 @@ from core.utils.Executor import _convert_subprocess_cmd, pidof
 
 
 def check_environment() -> bool:
+    """
+    Check if "opam config env" has set all the required environment variables
+
+    :return: True for valid environment configuration and False otherwise
+    """
     __opam_env__ = [
         'CAML_LD_LIBRARY_PATH',
         'MANPATH',
@@ -38,6 +43,11 @@ def check_environment() -> bool:
 
 
 def check_mirage() -> bool:
+    """
+    Check if MirageOS is installed by "opam"
+
+    :return: True if dune can find "mirage", False otherwise
+    """
     try:
         subprocess.check_output(
             _convert_subprocess_cmd('which mirage')
@@ -50,6 +60,11 @@ def check_mirage() -> bool:
 
 
 def check_redis_server() -> bool:
+    """
+    Check if instance of Redis server is running
+
+    :return: True if "redis-server" is running, False otherwise
+    """
     try:
         pidof('redis-server')
 
@@ -60,6 +75,11 @@ def check_redis_server() -> bool:
 
 
 def check_redis_queue() -> bool:
+    """
+    Check if at least one worker is running in Python Redis Queue
+
+    :return: True if at least 1 worker is running, False otherwise
+    """
     try:
         out = subprocess.check_output(
             _convert_subprocess_cmd('rq info')
@@ -75,7 +95,12 @@ def check_redis_queue() -> bool:
 
 
 def is_root() -> bool:
-    # Get the effective user id
+
+    """
+    Checks if current user is "root"
+
+    :return: True if effective user is "root"
+    """
     if os.geteuid() == 0:
         return True
     else:
