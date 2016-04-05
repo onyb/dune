@@ -166,7 +166,11 @@ def call(cmd, cwd):
         _perror(e)
 
 
-def check_output(cmd, cwd):
+def check_output(
+        cmd,
+        cwd=os.getcwd(),
+        strip=False
+):
     cmd = _convert_subprocess_cmd(cmd)
     try:
         out = subprocess.check_output(
@@ -180,11 +184,17 @@ def check_output(cmd, cwd):
     except subprocess.CalledProcessError as e:
         _perror(e)
     finally:
-        return out
+        if not strip:
+            return out
+        else:
+            return out.strip()
 
 
 def pidof(name):
     cmd = _convert_subprocess_cmd('pidof ' + name)
-    return subprocess.check_output(
-        cmd
+    out = check_output(
+        cmd,
+        strip=True
     )
+
+    return int(out)
