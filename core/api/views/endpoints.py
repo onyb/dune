@@ -3,12 +3,11 @@ from uuid import uuid4
 from flask import Module, jsonify, request
 from flask.views import MethodView
 
+from core.api import API
 from core.api.decorators import jsonp
 from core.backends.UNIX import UNIXBackend
 from core.utils.RequestValidator import CreateUnikernelValidator
 from ..RedisQueue import Q
-
-from core.api import API
 
 api = Module(
     __name__,
@@ -62,6 +61,9 @@ class CreateUnikernel(MethodView):
 
                     content['_id'] = _id
                     content['status'] = None
+                    content['created_at'] = None
+                    content['started_at'] = None
+
                     API.db.jobs.insert_one(
                         content
                     )
@@ -96,9 +98,38 @@ class CreateUnikernel(MethodView):
                     )
 
 
+class DetailsUnikernel(MethodView):
+    @jsonp
+    def get(self, _id):
+        data = API.db.jobs.find_one(
+            {
+                '_id': _id
+            }
+        )
+
+        return jsonify_status_code(
+            code=200,
+            data=data
+        )
+
+    @jsonp
+    def post(self, _id):
+        return jsonify_status_code(
+            code=405,
+            message='HTTP method POST is not allowed for this URL'
+        )
+
+
 CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
 api.add_url_rule(
     '/unikernel/create',
     view_func=CreateUnikernel_view,
+    methods=['GET', 'POST']
+)
+
+DetailsUnikernel_view = DetailsUnikernel.as_view('details_unikernel')
+api.add_url_rule(
+    '/unikernel/<_id>',
+    view_func=DetailsUnikernel_view,
     methods=['GET', 'POST']
 )

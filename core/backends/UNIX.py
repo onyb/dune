@@ -1,10 +1,11 @@
 import os
+from datetime import datetime
 
+from core.api import API
+from core.api.Status import Status
 from core.api.settings import _Config as Config  # TODO: Need to switch to proper config (Dev / Prod)
 from core.backends.IUnikernelBackend import IUnikernelBackend
 from core.utils.Executor import Executor
-
-from core.api.Status import Status
 
 
 class UNIXBackend(IUnikernelBackend):
@@ -49,6 +50,14 @@ class UNIXBackend(IUnikernelBackend):
         ) as file:
             file.write(unikernel)
 
+        API.db.jobs.update_one(
+            {
+                '_id': self._id
+            },
+            {
+                '$set': {'created_at': datetime.now()}
+            }
+        )
 
         # TODO: Initialize scheduler
 
@@ -95,6 +104,18 @@ class UNIXBackend(IUnikernelBackend):
     def start(self) -> int:
         executor = Executor(
             cwd=self.work_dir
+        )
+
+        client = API.create_mongo()
+        db = client.dune
+
+        db.jobs.update_one(
+            {
+                '_id': self._id
+            },
+            {
+                '$set': {'started_at': datetime.now()}
+            }
         )
 
         executor.logged_call(
