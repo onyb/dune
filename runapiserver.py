@@ -5,7 +5,7 @@ from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, 
     RedisServerNotFound, RedisQueueException
 from core.utils.check_sanity import check_environment, check_mirage, is_root, check_redis_server, check_redis_queue
 
-from core.utils.Worker import launch_daemon
+from core.utils.Worker import launch_rq_daemon
 
 
 def main():
