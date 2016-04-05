@@ -1,6 +1,7 @@
 from uuid import uuid4
+import os
 
-from flask import Module, jsonify, request
+from flask import Module, jsonify, request, Response
 from flask.views import MethodView
 
 from core.api import API
@@ -11,9 +12,8 @@ from ..RedisQueue import Q
 
 api = Module(
     __name__,
-    url_prefix='/api'
+    # url_prefix='/api'
 )
-
 
 def jsonify_status_code(*args, **kw):
     response = jsonify(*args, **kw)
@@ -30,6 +30,36 @@ def index():
         code=400,
         message='Room no 404: File not found'
     )
+
+
+@api.route('/static/<_id>/<file>')
+def static(_id, file):
+    work_dir = API.db.jobs.find_one(
+        {
+            '_id': _id
+        },
+        {
+            '_id': 0,
+            'work_dir': 1
+        }
+    )['work_dir']
+
+
+    try:
+        with open(os.path.join(work_dir, file), 'r') as f:
+            content = f.read()
+    except FileNotFoundError:
+        return jsonify_status_code(
+            code=404,
+            message='Room no 404: File not found'
+        )
+    except UnicodeDecodeError:
+        return jsonify_status_code(
+            code=415,
+            message='Access to binary data is forbidden'
+        )
+
+    return Response(content, mimetype="text/plain")
 
 
 class CreateUnikernel(MethodView):
@@ -64,14 +94,16 @@ class CreateUnikernel(MethodView):
                     content['created_at'] = None
                     content['started_at'] = None
 
-                    API.db.jobs.insert_one(
-                        content
-                    )
-
                     backend_instance = UNIXBackend(
                         _id=_id,
                         project=content['meta']['project'],
                         module=content['meta']['module']
+                    )
+
+                    content['work_dir'] = backend_instance.work_dir
+
+                    API.db.jobs.insert_one(
+                        content
                     )
 
                     backend_instance.register(
@@ -122,14 +154,14 @@ class DetailsUnikernel(MethodView):
 
 CreateUnikernel_view = CreateUnikernel.as_view('create_unikernel')
 api.add_url_rule(
-    '/unikernel/create',
+    '/api/unikernel/create',
     view_func=CreateUnikernel_view,
     methods=['GET', 'POST']
 )
 
 DetailsUnikernel_view = DetailsUnikernel.as_view('details_unikernel')
 api.add_url_rule(
-    '/unikernel/<_id>',
+    '/api/unikernel/<_id>',
     view_func=DetailsUnikernel_view,
     methods=['GET', 'POST']
 )
