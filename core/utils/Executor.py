@@ -191,7 +191,7 @@ def check_output(
 
 
 def pidof(name):
-    cmd = _convert_subprocess_cmd('pidof ' + name)
+    cmd = 'pidof ' + name
     out = check_output(
         cmd,
         strip=True
