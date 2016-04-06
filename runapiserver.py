@@ -3,7 +3,7 @@ import os
 from core.api import API
 from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, UnikernelLibraryNotFound, \
     RedisServerNotFound, RedisQueueException
-from core.utils.check_sanity import check_environment, check_mirage, is_root, check_redis_server, check_redis_queue
+from core.utils.check_sanity import *
 
 from core.utils.Worker import launch_rq_daemon
 
@@ -20,6 +20,10 @@ def main():
 
     if not check_redis_server():
         raise RedisServerNotFound
+
+    if not check_mongod_server():
+        raise MongoDBServerNotFound
+
 
     if not check_redis_queue():
         # launch_daemon()

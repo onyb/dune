@@ -40,6 +40,12 @@ class RedisServerNotFound(Exception):
     pass
 
 
+class MongoDBServerNotFound(Exception):
+    """
+    Exception raised if the MongoDB server is not running
+    """
+    pass
+
 class RedisQueueException(MessageBrokerException):
     """
     Exception raised if the Python Redis Queue is not found by the API server, or is not running any workers

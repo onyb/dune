@@ -73,6 +73,20 @@ def check_redis_server() -> bool:
         return True
 
 
+def check_mongod_server() -> bool:
+    """
+    Check if instance of MongoDB server is running
+
+    :return: True if "mongod" is running, False otherwise
+    """
+    pid = pidof('mongod')
+
+    if pid == -1:
+        return False
+    else:
+        return True
+
+
 def check_redis_queue() -> bool:
     """
     Check if at least one worker is running in Python Redis Queue
