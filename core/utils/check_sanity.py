@@ -65,10 +65,9 @@ def check_redis_server() -> bool:
 
     :return: True if "redis-server" is running, False otherwise
     """
-    try:
-        pidof('redis-server')
+    pid = pidof('redis-server')
 
-    except subprocess.CalledProcessError as e:
+    if pid == -1:
         return False
     else:
         return True

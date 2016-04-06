@@ -182,8 +182,8 @@ def check_output(
         ).decode('utf-8')
 
     except subprocess.CalledProcessError as e:
-        _perror(e)
-    finally:
+        raise e
+    else:
         if not strip:
             return out
         else:
@@ -192,9 +192,12 @@ def check_output(
 
 def pidof(name):
     cmd = 'pidof ' + name
-    out = check_output(
-        cmd,
-        strip=True
-    )
-
-    return int(out)
+    try:
+        out = check_output(
+            cmd,
+            strip=True
+        )
+    except subprocess.CalledProcessError:
+        return -1
+    else:
+        return int(out)
