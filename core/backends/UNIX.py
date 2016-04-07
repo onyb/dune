@@ -57,7 +57,9 @@ class UNIXBackend(IUnikernelBackend):
             },
             {
                 '$set': {
-                    'created_at': get_current_local_time()
+                    'created_at': get_current_local_time(),
+                    'config': '/static/' + self._id + '/config.ml',
+                    'unikernel': '/static/' + self._id + '/unikernel.ml'
                 }
             }
         )

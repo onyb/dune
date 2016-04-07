@@ -1,5 +1,5 @@
-from uuid import uuid4
 import os
+from uuid import uuid4
 
 from flask import Module, jsonify, request, Response
 from flask.views import MethodView
@@ -14,6 +14,7 @@ api = Module(
     __name__,
     # url_prefix='/api'
 )
+
 
 def jsonify_status_code(*args, **kw):
     response = jsonify(*args, **kw)
@@ -43,7 +44,6 @@ def static(_id, file):
             'work_dir': 1
         }
     )['work_dir']
-
 
     try:
         with open(os.path.join(work_dir, file), 'r') as f:
