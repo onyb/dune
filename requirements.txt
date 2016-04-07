@@ -5,6 +5,6 @@ itsdangerous
 Jinja2
 MarkupSafe
 Werkzeug
-Flask-PyMongo
+PyMongo
 flask-cors
 daemonize

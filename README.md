@@ -67,7 +67,7 @@ The AngularJS dashboard is served at `http://localhost:8888`
 - [Redis Queue](http://python-rq.org) for asynchronous task queueing
 - [Jinja2](http://jinja.pocoo.org) for templating with Flask
 - [MongoDB](https://docs.mongodb.org/manual) for the backend database
-- [Flask-PyMongo](https://flask-pymongo.readthedocs.org/en/latest), a wrapper around the original [PyMongo](https://api.mongodb.org/python/current) driver.
+- [PyMongo](https://api.mongodb.org/python/current) driver for MongoDB.
 - Test bench with [nose](https://nose.readthedocs.org/en/latest)
 
 ###### Dune Client
