@@ -1,6 +1,5 @@
-import subprocess
-
 import os
+import subprocess
 
 from core.utils.Executor import _convert_subprocess_cmd, pidof
 
@@ -27,7 +26,7 @@ def check_environment() -> bool:
 
     try:
         OCAML_VERSION = subprocess.check_output(
-           _convert_subprocess_cmd('ocaml -vnum')
+            _convert_subprocess_cmd('ocaml -vnum')
         ).decode('utf-8').strip()
 
     except subprocess.CalledProcessError:
@@ -35,7 +34,7 @@ def check_environment() -> bool:
 
     for path in PATH.split(':'):
         if path.endswith(
-            os.path.join('.opam', 'system', 'bin')
+                os.path.join('.opam', 'system', 'bin')
         ) or path.endswith(
             os.path.join('.opam', OCAML_VERSION, 'bin')
         ):
@@ -107,14 +106,34 @@ def check_redis_queue() -> bool:
         return True
 
 
-def is_root() -> bool:
-
+def check_privilege() -> bool:
     """
-    Checks if current user is "root"
+    Check if current user can execute apt-get on host without root access
 
-    :return: True if effective user is "root"
+    :return: True if apt-get is in sudoers list, False otherwise
+    """
+    try:
+        out = subprocess.check_output(
+            _convert_subprocess_cmd('sudo -l')
+        ).decode('utf-8')
+
+    except subprocess.CalledProcessError:
+        pass
+    else:
+        # Check README.md for more details on how to add apt-get to sudoers list
+        if 'User root' not in out and '(ALL : ALL) NOPASSWD: /usr/bin/apt-get install *' in out:
+            return True
+        else:
+            return False
+
+
+def is_not_root() -> bool:
+    """
+    Checks if current user is NOT "root"
+
+    :return: True if effective user is NOT "root", False otherwise
     """
     if os.geteuid() == 0:
-        return True
-    else:
         return False
+    else:
+        return True

@@ -14,7 +14,14 @@ class OPAMConfigurationError(Exception):
 
 class InsufficientPrivilegeError(Exception):
     """
-    Exception raised if API server is launched without sudo
+    Exception raised if API server is launched with insufficient privileges
+    """
+    pass
+
+
+class ExcessivePrivilegeError(Exception):
+    """
+    Exception raised if API server is launched as root
     """
     pass
 
@@ -45,6 +52,7 @@ class MongoDBServerNotFound(Exception):
     Exception raised if the MongoDB server is not running
     """
     pass
+
 
 class RedisQueueException(MessageBrokerException):
     """

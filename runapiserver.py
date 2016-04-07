@@ -8,22 +8,39 @@ def main():
     # Order of checks is important
     checks = [
         (
-            check_environment, 'Checking current shell environment', OPAMConfigurationError
+            check_environment,
+            'Check current shell environment',
+            OPAMConfigurationError
         ),
         (
-            check_mirage, 'Checking if MirageOS is present', UnikernelLibraryNotFound
+            check_mirage,
+            'Check MirageOS',
+            UnikernelLibraryNotFound
         ),
         (
-            is_root, 'Checking if current user is "root"', InsufficientPrivilegeError
+            is_not_root,
+            'Check if current user is NOT "root"',
+            ExcessivePrivilegeError
         ),
         (
-            check_redis_server, 'Checking for a running instance of Redis server', RedisServerNotFound
+            check_privilege,
+            'Check if user "%s" has the required privilege to run APT' % getuser(),  # User cannot be "root" here
+            InsufficientPrivilegeError
         ),
         (
-            check_mongod_server, 'Checking for a running instance of MongoDB server', MongoDBServerNotFound
+            check_redis_server,
+            'Check running instance of Redis server',
+            RedisServerNotFound
         ),
         (
-            check_redis_queue, 'Checking for Python Redis Queue worker', RedisQueueException
+            check_mongod_server,
+            'Check running instance of MongoDB server',
+            MongoDBServerNotFound
+        ),
+        (
+            check_redis_queue,
+            'Check Python Redis Queue worker',
+            RedisQueueException
         )
     ]
 
