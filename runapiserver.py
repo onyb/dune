@@ -2,7 +2,7 @@ import os
 
 from core.api import API
 from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, UnikernelLibraryNotFound, \
-    RedisServerNotFound, RedisQueueException
+    RedisServerNotFound, RedisQueueException, MongoDBServerNotFound
 from core.utils.check_sanity import *
 
 from core.utils.Worker import launch_rq_daemon
