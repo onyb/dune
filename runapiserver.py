@@ -1,33 +1,33 @@
-import os
-
 from core.api import API
-from core.exceptions import OPAMConfigurationError, InsufficientPrivilegeError, UnikernelLibraryNotFound, \
-    RedisServerNotFound, RedisQueueException, MongoDBServerNotFound
+from core.exceptions import *
 from core.utils.check_sanity import *
-
-from core.utils.Worker import launch_rq_daemon
 
 
 def main():
-    if not check_environment():
-        raise OPAMConfigurationError
+    checks = [
+        (
+            check_environment, OPAMConfigurationError
+        ),
+        (
+            check_mirage, UnikernelLibraryNotFound
+        ),
+        (
+            is_root, InsufficientPrivilegeError
+        ),
+        (
+            check_redis_server, RedisServerNotFound
+        ),
+        (
+            check_mongod_server, MongoDBServerNotFound
+        ),
+        (
+            check_redis_queue, RedisQueueException
+        )
+    ]
 
-    if not check_mirage():
-        raise UnikernelLibraryNotFound
-
-    if not is_root():
-        raise InsufficientPrivilegeError
-
-    if not check_redis_server():
-        raise RedisServerNotFound
-
-    if not check_mongod_server():
-        raise MongoDBServerNotFound
-
-
-    if not check_redis_queue():
-        # launch_daemon()
-        raise RedisQueueException
+    for check in checks:
+        if not check[0]():
+            raise check[1]
 
     port = int(
         os.environ.get(
