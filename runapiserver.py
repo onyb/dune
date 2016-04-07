@@ -56,7 +56,8 @@ def main():
 
     API.app.run(
         host='0.0.0.0',
-        port=port
+        port=port,
+        use_reloader=False
     )
 
 
