@@ -80,6 +80,10 @@ class CreateUnikernel(MethodView):
             )
         else:
             # Validate JSON
+
+            if 'module' in content['meta'] and ',' in content['meta']['module']:
+                content['meta']['module'] = [each.strip() for each in content['meta']['module'].split(',')]
+
             if not CreateUnikernelValidator.validate(content):
                 return jsonify_status_code(
                     code=400,
